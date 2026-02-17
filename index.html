@@ -1,1 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Torque 2D - Pro</title>
+    <link rel="icon" type="image/png" href="LOGO.jpg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <div id="modal-settings" class="modal-overlay" style="display: none;">
+        <div class="account-box" style="min-width: 350px;">
+            <h2 id="txt-settings-title" style="margin-top:0">⚙️ CONFIGURAÇÕES</h2>
+            
+            <div class="settings-section">
+                <h3 id="txt-account-title">👤 MINHA CONTA</h3>
+                <div class="stats-grid">
+                    <div id="txt-stat-money">💰 DINHEIRO:</div><div id="acc-money">$0</div>
+                    <div id="txt-stat-parts">🔧 PEÇAS:</div><div id="acc-parts">0</div>
+                    <div id="txt-stat-lvl">🏆 NÍVEL:</div><div id="acc-lvl">1</div>
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px dashed #444; margin: 15px 0;">
+
+            <div class="settings-section">
+                <h3 id="txt-lang-title">🌐 IDIOMA / LANGUAGE</h3>
+                <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
+                    <button class="control-btn" onclick="setLanguage('pt')" style="font-size: 12px;">Português</button>
+                    <button class="control-btn" onclick="setLanguage('en')" style="font-size: 12px;">English</button>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button id="txt-btn-save" class="control-btn" style="border-color: var(--neon-blue); color: var(--neon-blue); justify-content: center;" onclick="saveGame()">💾 SALVAR JOGO</button>
+                <button id="txt-btn-reset" class="control-btn" style="border-color: #ff4444; color: #ff4444; justify-content: center;" onclick="resetGame()">⚠️ RESETAR JOGO</button>
+                <button id="txt-btn-close" class="control-btn" style="border-color: #fff; color: #fff; justify-content: center;" onclick="toggleSettings()">VOLTAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-welcome" class="modal-overlay" style="display: flex;">
+        <div class="dialog-box">
+            <h2 id="txt-welcome-title">BEM-VINDO!</h2>
+            <p id="txt-welcome-desc">Deseja ativar o tutorial de montagem?</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="txt-btn-yes" class="control-btn" style="border-color: var(--neon-green); color: var(--neon-green);" onclick="startTutorial()">SIM</button>
+                <button id="txt-btn-no" class="control-btn" style="border-color: #ff4444; color: #ff4444;" onclick="showAreYouSure()">NÃO</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-sure" class="modal-overlay">
+        <div class="dialog-box">
+            <h2 id="txt-sure-title">TEM CERTEZA?</h2>
+            <p id="txt-sure-desc">Você terá que montar o motor sem ajuda.</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="txt-btn-confirm" class="control-btn" style="border-color: #ff4444; color: #ff4444;" onclick="closeAllModals(true)">SIM, TENHO CERTEZA</button>
+                <button id="txt-btn-back" class="control-btn" style="border-color: var(--neon-green); color: var(--neon-green);" onclick="backToWelcome()">NÃO, VOLTAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="tutorial-msg"></div>
+
+    <div id="ui-top">
+        <div class="hud-panel btn-account-hud" onclick="toggleSettings()">⚙️ CONFIGS</div>
+        <div class="hud-panel" style="border-color: var(--neon-blue);">
+            <span id="txt-hud-wallet" class="hud-label" style="color: var(--neon-blue);">CARTEIRA:</span> $<span id="credits-label">1550</span>
+            <div style="font-size: 10px; margin-top: 5px; color: #888;"><span id="txt-hud-lvl">NÍVEL</span> <span id="lvl-label">1</span></div>
+            <div class="xp-bar-container"><div id="xp-fill"></div></div>
+        </div>
+        <div class="hud-panel"><span id="txt-hud-engine" class="hud-label">MOTOR:</span> <span id="engine-status" class="offline">DESLIGADO</span></div>
+        <div class="hud-panel"><span id="txt-hud-oil" class="hud-label">ÓLEO:</span> <span id="oil-counter">0 / 100%</span></div>
+        <div class="hud-panel"><span id="txt-hud-speed" class="hud-label">VELOCIDADE:</span> <span id="kmh-label">0</span> KM/H</div>
+    </div>
+
+    <div id="shop-overlay">
+        <div class="shop-container">
+            <h2 id="txt-shop-title" style="color: var(--neon-blue); margin-top: 0;">AUTO PEÇAS TORQUE</h2>
+            
+            <div id="shop-tabs" style="display: flex; gap: 5px; margin-bottom: 15px;">
+                <button class="control-btn" style="flex:1; font-size: 10px;" onclick="renderShop()">PEÇAS</button>
+                <button id="tab-engines" class="control-btn" style="flex:1; font-size: 10px; border-color: #ff00ff; color: #ff00ff;" onclick="renderShop()">MOTORES (LVL 10)</button>
+            </div>
+
+            <div id="shop-list"></div>
+            <button id="txt-btn-exit-shop" class="control-btn btn-shop" style="width: 100%; margin-top: 20px; justify-content: center;" onclick="toggleShop()">SAIR DA LOJA</button>
+        </div>
+    </div>
+
+    <div id="canvas-container">
+        <canvas id="c" width="1024" height="600"></canvas>
+    </div>
+
+    <div id="controls">
+        <button class="control-btn btn-shop" onclick="toggleShop()"><span id="txt-btn-shop">🛒 Loja</span></button>
+        <button id="btn-hand" class="control-btn active-tool" onclick="setTool('hand')"><span id="txt-btn-hand">🖐️ Arrastar</span></button>
+        <button id="btn-wrench" class="control-btn" onclick="setTool('wrench')"><span id="txt-btn-wrench">🔧 Chave</span></button>
+        <button id="btn-oil" class="control-btn" onclick="setTool('oil')"><span id="txt-btn-oil">🛢️ Óleo</span></button>
+        <button id="btn-ign" class="control-btn btn-action" onclick="handleIgnitionClick()"><span id="txt-btn-ign">🔑 Ignição</span></button>
+        <button id="btn-sell-part" class="control-btn" style="display:none;" onclick="sellSinglePart()"><span id="txt-btn-sellpart">♻️ Vender Peça</span></button>
+        <button id="btn-sell" class="control-btn btn-sell" onclick="sellEngine()" disabled><span id="txt-btn-sellengine">💰 Vender Motor</span></button>
+    </div>
+
+    <div id="modal-diploma-container"></div>
+
+    <script src="game.js"></script>
+</body>
+</html>
