@@ -1,0 +1,234 @@
+:root {
+    --neon-orange: #ff8c00;
+    --neon-green: #00ff00;
+    --neon-blue: #00eaff;
+    --bg-brick: #0a0a0a;
+    --bg-panel: rgba(20, 20, 20, 0.95);
+}
+
+body { 
+    background-color: var(--bg-brick);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(0,234,255,0.1) 0%, transparent 60%),
+        repeating-linear-gradient(to right, #111 0px, #111 2px, transparent 2px, transparent 40px),
+        repeating-linear-gradient(to bottom, #0f0f0f 0px, #0f0f0f 2px, transparent 2px, transparent 20px);
+    color: #eee; 
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    margin: 0; 
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    user-select: none;
+}
+
+/* --- ESSENCIAL PARA O SISTEMA DE NÍVEL --- */
+.xp-bar-container {
+    width: 100%;
+    height: 6px;
+    background: #222;
+    border-radius: 3px;
+    margin-top: 5px;
+    overflow: hidden;
+    border: 1px solid #444;
+}
+#xp-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+    transition: width 0.5s ease-out;
+}
+.money-float {
+    position: absolute;
+    color: var(--neon-green);
+    font-weight: bold;
+    font-size: 28px;
+    pointer-events: none;
+    z-index: 1000;
+    text-shadow: 2px 2px 0px #000;
+    animation: floatUp 1.5s forwards;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-120px); opacity: 0; }
+}
+
+/* --- SEUS MODAIS ORIGINAIS --- */
+#modal-account {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9); z-index: 300; display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
+}
+.account-box {
+    background: var(--bg-panel); border: 2px solid #fff;
+    padding: 30px; border-radius: 12px; width: 400px; text-align: center;
+    box-shadow: 0 0 30px rgba(255,255,255,0.2);
+}
+.stats-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin: 20px 0; text-align: left; background: #000; padding: 15px; border-radius: 8px;
+}
+
+#tutorial-msg {
+    position: absolute; top: 120px;
+    background: var(--neon-blue); color: #000; 
+    padding: 12px 30px; border-radius: 4px; 
+    font-weight: bold; z-index: 150; display: none;
+    box-shadow: 0 0 15px var(--neon-blue);
+    text-transform: uppercase; border: 2px solid #fff;
+    text-align: center; max-width: 80%;
+}
+
+.modal-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9); z-index: 200; display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+}
+.dialog-box {
+    background: var(--bg-panel); border: 2px solid var(--neon-orange);
+    padding: 30px; border-radius: 12px; width: 380px; text-align: center;
+}
+
+/* --- SUA LOJA ORIGINAL --- */
+#shop-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85); z-index: 100;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+}
+.shop-container {
+    background: var(--bg-panel); border: 2px solid var(--neon-blue);
+    padding: 30px; border-radius: 12px; width: 400px;
+    box-shadow: 0 0 20px var(--neon-blue);
+}
+.shop-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid #333;
+}
+.shop-item button {
+    background: transparent; color: var(--neon-blue);
+    border: 1px solid var(--neon-blue); padding: 5px 15px;
+    cursor: pointer; font-weight: bold;
+}
+
+/* --- SEU HUD ORIGINAL --- */
+#ui-top {
+    width: 98%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px 0;
+    position: absolute;
+    top: 0;
+    z-index: 50;
+}
+
+.hud-panel {
+    background: var(--bg-panel);
+    border: 2px solid var(--neon-orange);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.2) inset, 0 0 5px var(--neon-orange);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 140px;
+    text-align: center;
+}
+
+.btn-account-hud {
+    cursor: pointer;
+    border-color: #fff;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    transition: 0.3s;
+    pointer-events: auto;
+}
+.btn-account-hud:hover { background: #fff; color: #000; box-shadow: 0 0 20px #fff; }
+
+.hud-label { color: var(--neon-orange); font-weight: bold; margin-right: 5px; }
+#engine-status.online { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
+#engine-status.offline { color: #ff4444; text-shadow: 0 0 10px #ff0000; }
+
+#canvas-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    max-width: 1000px; /* Ajuste o tamanho máximo se quiser que ela não estique demais */
+    height: 500px;      /* Define uma altura fixa para o seu "quadrado" */
+    position: relative;
+    margin: 100px auto;  /* Centraliza na tela */
+    
+    /* CONFIGURAÇÃO DA IMAGEM */
+    background-image: url('background.png');
+    background-size: contain;      /* MUDANÇA: 'contain' faz a imagem inteira caber no quadro */
+    background-position: bottom;   /* Alinha por baixo para a mesa bater com o fundo */
+    background-repeat: no-repeat;
+    
+    /* ESTÉTICA */
+    border: 3px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+canvas { 
+    border-bottom: 4px solid #333;
+    background: transparent;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+/* --- SEUS CONTROLES ORIGINAIS --- */
+#controls { 
+    position: absolute; bottom: 0; width: 100%;
+    background: rgba(10, 10, 10, 0.95); border-top: 3px solid #333;
+    padding: 15px; display: flex; justify-content: center; gap: 15px;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.7);
+}
+
+.control-btn { 
+    padding: 12px 20px; cursor: pointer; font-weight: bold;
+    background: transparent; color: var(--neon-orange);
+    border: 2px solid var(--neon-orange); border-radius: 8px;
+    display: flex; align-items: center; gap: 8px; text-transform: uppercase;
+}
+.active-tool { background: var(--neon-orange); color: #000; }
+.btn-action { border-color: var(--neon-green); color: var(--neon-green); }
+.btn-shop { border-color: var(--neon-blue); color: var(--neon-blue); }
+.btn-sell { border-color: #ff4444; color: #ff4444; }
+.btn-sell:disabled { border-color: #444; color: #444; cursor: not-allowed; opacity: 0.5; }
+
+#btn-sell-part { border-color: #ff00ff; color: #ff00ff; display: none; }
+
+/* --- CURSORES ORIGINAIS --- */
+.tool-hand { cursor: grab !important; }
+.tool-hand:active { cursor: grabbing !important; }
+.tool-wrench { cursor: url('https://img.icons8.com/ios-filled/32/ffa500/wrench.png') 16 16, auto !important; }
+.tool-oil { cursor: url('https://img.icons8.com/ios-filled/32/00eaff/oil-industry.png') 16 16, auto !important; }
+
+/* --- ESSENCIAL PARA O DIPLOMA --- */
+.diploma-card {
+    background: #1a1a1a;
+    border: 5px double var(--neon-blue);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 40px rgba(0, 234, 255, 0.3);
+    max-width: 500px;
+    color: #fff;
+}
+.diploma-card h1 { color: var(--neon-blue); margin-top: 0; font-size: 2em; }
+.diploma-card h2 { color: var(--neon-orange); letter-spacing: 2px; }
+.diploma-card .stamp { font-size: 50px; margin: 20px 0; opacity: 0.8; }
+.diploma-card .date { color: #888; font-style: italic; margin-top: 20px; }
+
+.shop-item button:disabled {
+    filter: grayscale(1);
+    opacity: 0.5;
+}
